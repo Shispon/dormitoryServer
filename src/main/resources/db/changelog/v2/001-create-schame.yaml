@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-diplom-schema
+      author: Shispon
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - sql:
+            sql: CREATE SCHEMA IF NOT EXISTS diplom;
+            dbms: postgresql
+        - sql:
+            sql: ALTER SCHEMA diplom OWNER TO admin;
+            dbms: postgresql
+        - sql:
+            sql: ALTER ROLE admin SET search_path TO diplom, public;
+            dbms: postgresql
