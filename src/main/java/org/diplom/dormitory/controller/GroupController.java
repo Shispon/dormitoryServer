@@ -36,4 +36,17 @@ public class GroupController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    @PutMapping
+    public ResponseEntity<String> setCurator(
+            @RequestParam Integer groupId,
+            @RequestParam Integer curatorId
+    ) {
+        try {
+            groupService.setCurator(groupId, curatorId);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }catch (ResponseStatusException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 }

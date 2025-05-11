@@ -40,4 +40,12 @@ public class GroupService  {
         return groupRepository.save(group);
     }
 
+    public void setCurator(Integer groupId, Integer curatorId) {
+        try {
+            groupRepository.setCurator(groupId, curatorId);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

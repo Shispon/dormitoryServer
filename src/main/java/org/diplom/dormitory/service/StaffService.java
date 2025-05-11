@@ -46,6 +46,6 @@ public class StaffService {
         Role role = roleRepository.findById(staffDTO.getRoleId())
                 .orElseThrow(() -> new RuntimeException("Роль не найдена"));
         staff.setRole(role);
-        return staff;
+        return staffRepository.save(staff);
     }
 }
