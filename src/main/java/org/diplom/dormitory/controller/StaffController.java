@@ -1,12 +1,13 @@
 package org.diplom.dormitory.controller;
 
+import org.diplom.dormitory.DTO.StaffDTO;
+import org.diplom.dormitory.mapper.StaffMapper;
+import org.diplom.dormitory.model.Staff;
 import org.diplom.dormitory.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/staff")
@@ -38,6 +39,19 @@ public class StaffController {
         } catch (IllegalArgumentException e) {
             // Возвращаем ошибку, если аутентификация не удалась
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<StaffDTO> createStaff(@RequestBody StaffDTO staffDTO) {
+        try {
+            Staff staff = staffService.createStaff(staffDTO);
+
+            StaffDTO responseDro = StaffMapper.toDTO(staff);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDro);
+        }catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 }

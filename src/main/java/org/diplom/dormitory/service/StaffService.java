@@ -1,6 +1,10 @@
 package org.diplom.dormitory.service;
 
+import org.diplom.dormitory.DTO.StaffDTO;
+import org.diplom.dormitory.mapper.StaffMapper;
+import org.diplom.dormitory.model.Role;
 import org.diplom.dormitory.model.Staff;
+import org.diplom.dormitory.repository.RoleRepository;
 import org.diplom.dormitory.repository.StaffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,36 +15,37 @@ import java.util.Optional;
 public class StaffService {
 
     private final StaffRepository staffRepository;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    public StaffService(StaffRepository staffRepository) {
+    public StaffService(StaffRepository staffRepository, RoleRepository roleRepository) {
         this.staffRepository = staffRepository;
+        this.roleRepository = roleRepository;
     }
 
-    /**
-     * Проверяет аутентификацию сотрудника и возвращает его роль.
-     *
-     * @param mail     Email сотрудника
-     * @param password Пароль сотрудника
-     * @return Роль сотрудника (roleName)
-     * @throws IllegalArgumentException если сотрудник не найден или пароль неверный
-     */
     public String authenticateAndGetRole(String mail, String password) {
-        // Ищем сотрудника по email
         Optional<Staff> optionalStaff = staffRepository.findByMail(mail);
-
         if (optionalStaff.isEmpty()) {
             throw new IllegalArgumentException("Пользователь с таким email не найден.");
         }
-
         Staff staff = optionalStaff.get();
-
-        // Проверяем пароль
         if (!staff.getPassword().equals(password)) {
             throw new IllegalArgumentException("Неверный пароль.");
         }
-
-        // Возвращаем роль сотрудника
         return staff.getRole().getRoleName();
+    }
+
+    public Staff createStaff(StaffDTO staffDTO) {
+        Staff staff = new Staff();
+        staff.setFirstName(staffDTO.getFirstName());
+        staff.setSecondName(staffDTO.getSecondName());
+        staff.setLastName(staffDTO.getLastName());
+        staff.setPhoneNumber(staffDTO.getPhoneNumber());
+        staff.setMail(staffDTO.getEmail());
+        staff.setPassword(staffDTO.getPassword());
+        Role role = roleRepository.findById(staffDTO.getRoleId())
+                .orElseThrow(() -> new RuntimeException("Роль не найдена"));
+        staff.setRole(role);
+        return staff;
     }
 }

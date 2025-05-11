@@ -21,7 +21,7 @@ databaseChangeLog:
                 mail TEXT NOT NULL unique,
                 telegram_id TEXT not null,
                 photo BYTEA,
-                is_present BOOLEAN NOT NULL DEFAULT FALSE,
+                is_present BOOLEAN NOT NULL DEFAULT TRUE,
                 date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 date_deleted TIMESTAMP,
                 date_present TIMESTAMP,

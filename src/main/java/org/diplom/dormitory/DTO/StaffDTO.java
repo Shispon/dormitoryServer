@@ -1,54 +1,28 @@
-package org.diplom.dormitory.model;
-
-import jakarta.persistence.*;
+package org.diplom.dormitory.DTO;
 
 
-
-@Entity
-@Table(name = "staff", schema = "diplom")
-public class Staff {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+public class StaffDTO {
     private Integer id;
-
-    @Column(name = "first_name", nullable = false)
     private String firstName;
-
-    @Column(name = "second_name", nullable = false)
     private String secondName;
-
-    @Column(name = "last_name", nullable = false)
     private String lastName;
-
-    @Column(name = "password", nullable = false)
     private String password;
-
-    @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
+    private String email;
+    private Integer roleId;
 
-    @Column(name = "mail", nullable = false, unique = true)
-    private String mail;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role;
-
-
-
-    public Staff() {
+    public StaffDTO() {
     }
 
-    public Staff(String firstName, String secondName, Integer id, String lastName, String password, String phoneNumber, String mail, Role role) {
+    public StaffDTO(Integer id, String firstName, String secondName, String lastName, String password, String phoneNumber, String email, Integer roleId) {
+        this.id = id;
         this.firstName = firstName;
         this.secondName = secondName;
-        this.id = id;
         this.lastName = lastName;
         this.password = password;
         this.phoneNumber = phoneNumber;
-        this.mail = mail;
-        this.role = role;
+        this.email = email;
+        this.roleId = roleId;
     }
 
     public Integer getId() {
@@ -99,20 +73,19 @@ public class Staff {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public Role getRole() {
-        return role;
+    public Integer getRoleId() {
+        return roleId;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
-
 }
