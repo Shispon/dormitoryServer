@@ -37,6 +37,9 @@ public class Parent {
     @Column(name = "telegram_id", nullable = false)
     private String telegramId;
 
+    @Column(name = "chat_id")
+    private String chatId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;

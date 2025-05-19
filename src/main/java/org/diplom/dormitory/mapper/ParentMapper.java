@@ -16,6 +16,7 @@ public class ParentMapper {
         dto.setMail(parent.getMail());
         dto.setPhoneNumber(parent.getPhoneNumber());
         dto.setTelegramId(parent.getTelegramId());
+        dto.setChatId(parent.getChatId());
         dto.setRoleId(parent.getRole().getId());
         return dto;
     }
@@ -30,6 +31,7 @@ public class ParentMapper {
         parent.setMail(dto.getMail());
         parent.setPhoneNumber(dto.getPhoneNumber());
         parent.setTelegramId(dto.getTelegramId());
+        parent.setChatId(dto.getChatId());
         if(dto.getRoleId()!=null){
             Role role = new Role();
             role.setId(dto.getRoleId());

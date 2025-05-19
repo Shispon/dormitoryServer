@@ -1,12 +1,17 @@
 package org.diplom.dormitory.service;
 
 import org.diplom.dormitory.DTO.ParentDTO;
+import org.diplom.dormitory.mapper.ParentMapper;
 import org.diplom.dormitory.model.Parent;
 import org.diplom.dormitory.model.Role;
 import org.diplom.dormitory.repository.ParentRepository;
 import org.diplom.dormitory.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ParentService {
@@ -31,5 +36,12 @@ public class ParentService {
                 .orElseThrow(() -> new RuntimeException("Роль не найдена"));
         parent.setRole(role);
         return parentRepository.save(parent);
+    }
+
+    public List<ParentDTO> getAllParents() {
+        List<Parent> parents = parentRepository.findAll();
+        return parents.stream()
+                .map(ParentMapper::toDTO)
+                .toList();
     }
 }

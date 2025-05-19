@@ -9,6 +9,7 @@ import org.diplom.dormitory.repository.StaffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,16 +37,14 @@ public class StaffService {
     }
 
     public Staff createStaff(StaffDTO staffDTO) {
-        Staff staff = new Staff();
-        staff.setFirstName(staffDTO.getFirstName());
-        staff.setSecondName(staffDTO.getSecondName());
-        staff.setLastName(staffDTO.getLastName());
-        staff.setPhoneNumber(staffDTO.getPhoneNumber());
-        staff.setMail(staffDTO.getEmail());
-        staff.setPassword(staffDTO.getPassword());
-        Role role = roleRepository.findById(staffDTO.getRoleId())
-                .orElseThrow(() -> new RuntimeException("Роль не найдена"));
-        staff.setRole(role);
+        Staff staff = StaffMapper.toEntity(staffDTO);
         return staffRepository.save(staff);
+    }
+
+    public List<StaffDTO> getAllStaff() {
+        List<Staff> staffList = staffRepository.findAll();
+        return staffList.stream()
+                .map(StaffMapper::toDTO)
+                .toList();
     }
 }

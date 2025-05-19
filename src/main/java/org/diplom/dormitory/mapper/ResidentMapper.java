@@ -20,6 +20,7 @@ public class ResidentMapper {
         residentDTO.setPhoneNumber(resident.getPhoneNumber());
         residentDTO.setMail(resident.getMail());
         residentDTO.setTelegramId(resident.getTelegramId());
+        residentDTO.setChatId(resident.getChatId());
         residentDTO.setPhoto(resident.getPhoto());
         residentDTO.setQrCode(resident.getQrCode());
         residentDTO.setIsPresent(resident.getIsPresent());
@@ -43,6 +44,7 @@ public class ResidentMapper {
         resident.setPhoneNumber(residentDTO.getPhoneNumber());
         resident.setMail(residentDTO.getMail());
         resident.setTelegramId(residentDTO.getTelegramId());
+        resident.setChatId(residentDTO.getChatId());
         resident.setPhoto(residentDTO.getPhoto());
         resident.setQrCode(residentDTO.getQrCode());
         resident.setIsPresent(residentDTO.getIsPresent());

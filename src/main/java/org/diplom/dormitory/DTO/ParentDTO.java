@@ -15,5 +15,6 @@ public class ParentDTO {
     private String phoneNumber;
     private String mail;
     private String telegramId;
+    private String chatId;
     private Integer roleId;
 }

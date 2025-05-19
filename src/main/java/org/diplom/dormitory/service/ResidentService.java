@@ -2,6 +2,7 @@ package org.diplom.dormitory.service;
 
 
 import org.diplom.dormitory.DTO.ResidentDTO;
+import org.diplom.dormitory.mapper.ResidentMapper;
 import org.diplom.dormitory.model.Group;
 import org.diplom.dormitory.model.Resident;
 import org.diplom.dormitory.model.Role;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ResidentService {
@@ -32,6 +34,7 @@ public class ResidentService {
     public Resident createResident(ResidentDTO dto) {
         Resident resident = new Resident();
 
+        // Заполняем поля из DTO
         resident.setFirstName(dto.getFirstName());
         resident.setSecondName(dto.getSecondName());
         resident.setLastName(dto.getLastName());
@@ -41,26 +44,64 @@ public class ResidentService {
         resident.setTelegramId(dto.getTelegramId());
         resident.setPhoto(dto.getPhoto());
 
-        // Генерация QR-кода
+        // Изначально QR-код не устанавливаем (оставляем null)
+        resident.setIsPresent(true);
+        resident.setDateCreated(LocalDateTime.now());
+
+        // Получаем роль по id из репозитория, если не нашли — кидаем исключение
+        Role role = roleRepository.findById(dto.getRoleId())
+                .orElseThrow(() -> new RuntimeException("Роль не найдена"));
+        resident.setRole(role);
+
+        // Аналогично получаем группу по id
+        Group group = groupRepository.findById(dto.getGroupId())
+                .orElseThrow(() -> new RuntimeException("Группа не найдена"));
+        resident.setGroup(group);
+
+        // Сохраняем жителя первый раз, чтобы он получил id в базе
+        resident = residentRepository.save(resident);
+
+        // Теперь генерируем QR-код на основе сохранённого id (id уже есть после save)
         try {
-            byte[] qrCode = qrCodeGenerator.generateQRCode(dto.getTelegramId(), 200, 200);
+            byte[] qrCode = qrCodeGenerator.generateQRCode(resident.getId().toString(), 200, 200);
             resident.setQrCode(qrCode);
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при генерации QR-кода", e);
         }
 
-        resident.setIsPresent(true);
-        resident.setDateCreated(LocalDateTime.now());
+        // Сохраняем обновлённого жителя с QR-кодом
+        resident = residentRepository.save(resident);
 
-        Role role = roleRepository.findById(dto.getRoleId())
-                .orElseThrow(() -> new RuntimeException("Роль не найдена"));
-        resident.setRole(role);
-
-        Group group = groupRepository.findById(dto.getGroupId())
-                .orElseThrow(() -> new RuntimeException("Группа не найдена"));
-        resident.setGroup(group);
-
-        return residentRepository.save(resident);
+        // Возвращаем обновлённого жителя с QR-кодом
+        return resident;
     }
+
+
+    public List<ResidentDTO> getAllResidents() {
+        List<Resident> residents = residentRepository.findAll();
+        return residents.stream()
+                .map(ResidentMapper::toDTO)
+                .toList();
+    }
+
+    public Resident getResidentById(Integer id) {
+        return residentRepository.findById(id).orElse(null);
+    }
+
+    public void addPresentToResident(Integer id, Boolean present) {
+        try {
+            Resident resident = getResidentById(id);
+            resident.setIsPresent(present);
+            if (present) {
+                resident.setDatePresent(LocalDateTime.now());
+            }else
+                resident.setDateMissing(LocalDateTime.now());
+            residentRepository.save(resident);
+        }catch (NullPointerException e) {
+            e.getMessage();
+        }
+
+    }
+
 
 }

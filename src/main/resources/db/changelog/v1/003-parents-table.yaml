@@ -18,7 +18,8 @@ databaseChangeLog:
                 last_name TEXT NOT NULL,
                 phone_number TEXT NOT NULL,
                 mail TEXT NOT NULL, 
-                telegram_id TEXT,
+                telegram_id TEXT NOT NULL,
+                chat_id TEXT,
                 role_id INT NOT NULL
               );
             dbms: postgresql

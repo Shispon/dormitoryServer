@@ -1,10 +1,22 @@
 package org.diplom.dormitory.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Column;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +43,7 @@ public class Resident {
     private String lastName;
 
     @Column(name = "age", nullable = false)
-    private Integer age;
+    private LocalDate age;
 
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
@@ -42,12 +54,15 @@ public class Resident {
     @Column(name = "telegram_id", nullable = false)
     private String telegramId;
 
+    @Column(name = "chat_id")
+    private String chatId;
+
     @Lob
     @Column(name = "photo")
     private byte[] photo;
 
     @Lob
-    @Column(name = "qr_code", nullable = false)
+    @Column(name = "qr_code")
     private byte[] qrCode;
 
     @Column(name = "is_present",nullable = false)
