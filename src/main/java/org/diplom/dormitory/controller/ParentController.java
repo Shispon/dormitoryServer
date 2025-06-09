@@ -38,4 +38,33 @@ public class ParentController {
         List<ParentDTO> parentsDTO = parentService.getAllParents();
         return ResponseEntity.status(HttpStatus.OK).body(parentsDTO);
     }
+
+    @GetMapping("/getParentById")
+    public ResponseEntity<ParentDTO> getResidentById(@RequestParam Integer id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(parentService.getParentById(id));
+        }catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteParentById(@RequestParam Integer id) {
+        try {
+            parentService.deleteParentById(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Родитель удален");
+        }catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Родитель не найден");
+        }
+    }
+
+    @PutMapping("/updateParent")
+    public ResponseEntity<ParentDTO> updateParent(@RequestBody ParentDTO parentDTO) {
+        try {
+            ParentDTO dto = parentService.updateParent(parentDTO);
+            return ResponseEntity.status(HttpStatus.OK).body(dto);
+        }catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
 }

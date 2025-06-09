@@ -24,6 +24,7 @@ databaseChangeLog:
                 photo OID,
                 qr_code OID,
                 is_present BOOLEAN NOT NULL DEFAULT FALSE,
+                is_deleted BOOLEAN DEFAULT FALSE,
                 date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 date_deleted TIMESTAMP,
                 date_present TIMESTAMP,

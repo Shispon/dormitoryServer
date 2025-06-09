@@ -12,7 +12,6 @@ public class ResidentParentMapper {
             return null;
         }
         ResidentParentDTO residentParentDTO = new ResidentParentDTO();
-        residentParentDTO.setId(residentParent.getId());
         residentParentDTO.setParentId(residentParent.getParent().getId());
         residentParentDTO.setResidentId(residentParent.getResident().getId());
         return residentParentDTO;
@@ -23,7 +22,6 @@ public class ResidentParentMapper {
             return null;
         }
         ResidentParent residentParent = new ResidentParent();
-        residentParent.setId(residentParentDTO.getId());
         if (residentParentDTO.getParentId() != null) {
             Parent parent = new Parent();
             parent.setId(residentParentDTO.getParentId());

@@ -84,13 +84,13 @@ public class ResidentService {
                 .toList();
     }
 
-    public Resident getResidentById(Integer id) {
-        return residentRepository.findById(id).orElse(null);
+    public ResidentDTO getResidentById(Integer id) {
+        return ResidentMapper.toDTO(residentRepository.findById(id).orElseThrow(null));
     }
 
     public void addPresentToResident(Integer id, Boolean present) {
         try {
-            Resident resident = getResidentById(id);
+            Resident resident = residentRepository.findById(id).orElseThrow(null);
             resident.setIsPresent(present);
             if (present) {
                 resident.setDatePresent(LocalDateTime.now());
@@ -100,8 +100,38 @@ public class ResidentService {
         }catch (NullPointerException e) {
             e.getMessage();
         }
-
     }
+
+    public void deleteResident(Integer id) {
+        Resident resident = residentRepository.findById(id).orElseThrow(null);
+        resident.setIsDeleted(true);
+        resident.setDateDeleted(LocalDateTime.now());
+        residentRepository.delete(resident);
+    }
+
+    public ResidentDTO updateResident(ResidentDTO dto) {
+        if (dto == null) return null;
+
+        Resident resident = residentRepository.findById(dto.getId())
+                .orElseThrow(() -> new RuntimeException("Жилец не найден"));
+
+        resident.setFirstName(dto.getFirstName());
+        resident.setSecondName(dto.getSecondName());
+        resident.setLastName(dto.getLastName());
+        resident.setAge(dto.getAge());
+        resident.setPhoneNumber(dto.getPhoneNumber());
+        resident.setMail(dto.getMail());
+        resident.setTelegramId(dto.getTelegramId());
+        resident.setPhoto(dto.getPhoto());
+
+        Group group = groupRepository.findById(dto.getGroupId())
+                .orElseThrow(() -> new RuntimeException("Группа не найдена"));
+        resident.setGroup(group);
+
+        return ResidentMapper.toDTO(residentRepository.save(resident));
+    }
+
+
 
 
 }

@@ -24,6 +24,7 @@ public class ResidentDTO {
     private byte[] photo;
     private byte[] qrCode;
     private Boolean isPresent;
+    private Boolean isDeleted;
     private LocalDateTime dateCreated;
     private LocalDateTime dateDeleted;
     private LocalDateTime datePresent;

@@ -15,6 +15,7 @@ import jakarta.persistence.CascadeType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -68,6 +69,9 @@ public class Resident {
     @Column(name = "is_present",nullable = false)
     private Boolean isPresent;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
     @Column(name = "date_created", nullable = false)
     private LocalDateTime dateCreated;
 
@@ -82,12 +86,15 @@ public class Resident {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
+    @ToString.Exclude
     private Role role;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id")
+    @ToString.Exclude
     private Group group;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ResidentParent> residentParents = new ArrayList<>();
 }

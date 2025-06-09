@@ -48,8 +48,7 @@ public class ResidentController {
     @GetMapping("/getResidentById")
     public ResponseEntity<ResidentDTO> getResidentById(@RequestParam Integer id) {
         try {
-            Resident resident = residentService.getResidentById(id);
-            ResidentDTO residentDTO = ResidentMapper.toDTO(resident);
+            ResidentDTO residentDTO = residentService.getResidentById(id);
             return ResponseEntity.status(HttpStatus.OK).body(residentDTO);
         }catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -62,11 +61,30 @@ public class ResidentController {
             int residentId = Integer.parseInt(id);
             residentService.addPresentToResident(residentId, isPresent);
 
-            Resident resident = residentService.getResidentById(residentId);
-            ResidentDTO dto = ResidentMapper.toDTO(resident);
+            ResidentDTO dto = residentService.getResidentById(residentId);
 
             kafkaService.sendResidentStatus(dto);
             return ResponseEntity.status(HttpStatus.OK).body("Данные получены и обновлены");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/updateResident")
+    public ResponseEntity<ResidentDTO> updateResident(@RequestBody ResidentDTO dto) {
+        try {
+            ResidentDTO residentDTO = residentService.updateResident(dto);
+            return ResponseEntity.status(HttpStatus.OK).body(residentDTO);
+        }catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteResident(@RequestParam Integer id) {
+        try {
+            residentService.deleteResident(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Жилец удален");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

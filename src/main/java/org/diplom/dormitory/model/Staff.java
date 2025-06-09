@@ -1,7 +1,7 @@
 package org.diplom.dormitory.model;
 
 import jakarta.persistence.*;
-
+import lombok.ToString;
 
 
 @Entity
@@ -33,6 +33,7 @@ public class Staff {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
+    @ToString.Exclude
     private Role role;
 
 

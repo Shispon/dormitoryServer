@@ -1,5 +1,8 @@
 package org.diplom.dormitory.service;
 
+import org.diplom.dormitory.DTO.ParentDTO;
+import org.diplom.dormitory.DTO.ResidentParentDTO;
+import org.diplom.dormitory.mapper.ParentMapper;
 import org.diplom.dormitory.model.Parent;
 import org.diplom.dormitory.model.Resident;
 import org.diplom.dormitory.model.ResidentParent;
@@ -8,6 +11,10 @@ import org.diplom.dormitory.repository.ResidentParentRepository;
 import org.diplom.dormitory.repository.ResidentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ResidentParentService {
@@ -33,5 +40,12 @@ public class ResidentParentService {
         link.setParent(parent);
 
         residentParentRepository.save(link);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ParentDTO> getParentsByResidentId(Integer residentId) {
+        return   residentParentRepository.findParentsByResidentId(residentId).stream()
+                .map(ParentMapper::toDTO)
+                .toList();
     }
 }

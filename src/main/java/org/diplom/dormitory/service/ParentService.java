@@ -44,4 +44,24 @@ public class ParentService {
                 .map(ParentMapper::toDTO)
                 .toList();
     }
+
+    public ParentDTO getParentById(Integer id) {
+        return ParentMapper.toDTO(parentRepository.findById(id).orElseThrow(null));
+    }
+
+    public void deleteParentById(Integer id) {
+        parentRepository.deleteById(id);
+    }
+
+    public ParentDTO updateParent(ParentDTO parentDTO) {
+        if(parentDTO == null) {return null;}
+        Parent parent = parentRepository.findById(parentDTO.getId()).orElseThrow(null);
+        parent.setFirstName(parentDTO.getFirstName());
+        parent.setSecondName(parentDTO.getSecondName());
+        parent.setLastName(parentDTO.getLastName());
+        parent.setMail(parentDTO.getMail());
+        parent.setPhoneNumber(parentDTO.getPhoneNumber());
+        parent.setTelegramId(parentDTO.getTelegramId());
+        return ParentMapper.toDTO(parentRepository.save(parent));
+    }
 }

@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
@@ -25,9 +26,11 @@ public class ResidentParent {
 
     @ManyToOne
     @JoinColumn(name = "resident_id", nullable = false)
+    @ToString.Exclude
     private Resident resident;
 
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = false)
+    @ToString.Exclude
     private Parent parent;
 }

@@ -24,6 +24,7 @@ public class ResidentMapper {
         residentDTO.setPhoto(resident.getPhoto());
         residentDTO.setQrCode(resident.getQrCode());
         residentDTO.setIsPresent(resident.getIsPresent());
+        residentDTO.setIsDeleted(resident.getIsDeleted());
         residentDTO.setDateCreated(resident.getDateCreated());
         residentDTO.setDateDeleted(resident.getDateDeleted());
         residentDTO.setDatePresent(resident.getDatePresent());
@@ -48,6 +49,7 @@ public class ResidentMapper {
         resident.setPhoto(residentDTO.getPhoto());
         resident.setQrCode(residentDTO.getQrCode());
         resident.setIsPresent(residentDTO.getIsPresent());
+        resident.setIsDeleted(residentDTO.getIsDeleted());
         resident.setDateCreated(residentDTO.getDateCreated());
         resident.setDateDeleted(residentDTO.getDateDeleted());
         resident.setDatePresent(residentDTO.getDatePresent());

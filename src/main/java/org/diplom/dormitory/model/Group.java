@@ -2,6 +2,7 @@ package org.diplom.dormitory.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -18,10 +19,12 @@ public class Group {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "curator_id")
+    @ToString.Exclude
     private Staff curator_id;
 
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     @JsonIgnore
+    @ToString.Exclude
     private List<Resident> residents;
 
 
