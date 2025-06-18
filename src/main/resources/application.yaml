@@ -28,3 +28,11 @@ spring:
       properties:
         spring.json.add.type.headers: false
 
+  mail:
+    host: smtp.yandex.ru
+    port: 465
+    username: WalDemar32.Polk@yandex.ru
+    password: fbbuikmramcpeyio
+    protocol: smtps
+    tls: true
+    auth: true

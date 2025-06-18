@@ -1,8 +1,8 @@
 package org.diplom.dormitory.service;
 
+
 import org.diplom.dormitory.DTO.StaffDTO;
 import org.diplom.dormitory.mapper.StaffMapper;
-import org.diplom.dormitory.model.Role;
 import org.diplom.dormitory.model.Staff;
 import org.diplom.dormitory.repository.RoleRepository;
 import org.diplom.dormitory.repository.StaffRepository;
@@ -46,5 +46,24 @@ public class StaffService {
         return staffList.stream()
                 .map(StaffMapper::toDTO)
                 .toList();
+    }
+
+    public StaffDTO updateStaff(StaffDTO dto) {
+        if (dto == null) return null;
+
+        Staff staff = staffRepository.findById(dto.getId())
+                .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+
+        staff.setFirstName(dto.getFirstName());
+        staff.setSecondName(dto.getSecondName());
+        staff.setLastName(dto.getLastName());
+        staff.setPhoneNumber(dto.getPhoneNumber());
+        staff.setMail(dto.getEmail());
+
+        return StaffMapper.toDTO(staffRepository.save(staff));
+    }
+
+    public void deleteStaff (Integer id) {
+        staffRepository.deleteById(id);
     }
 }

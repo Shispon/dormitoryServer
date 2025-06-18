@@ -90,5 +90,15 @@ public class ResidentController {
         }
     }
 
+    @GetMapping("/getResidentsIsPresent")
+    public ResponseEntity<List<ResidentDTO>> getResidentsIsPresent(@RequestParam Boolean isPresent) {
+        try {
+            List<ResidentDTO> dto = residentService.getAllResidentsPresent(isPresent);
+            return ResponseEntity.status(HttpStatus.OK).body(dto);
+        }catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
 
 }

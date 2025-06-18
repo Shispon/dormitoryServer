@@ -62,4 +62,24 @@ public class StaffController {
         List<StaffDTO> staffDTOList = staffService.getAllStaff();
         return ResponseEntity.status(HttpStatus.OK).body(staffDTOList);
     }
+
+    @PutMapping("/updateStaff")
+    public ResponseEntity<StaffDTO> updateResident(@RequestBody StaffDTO dto) {
+        try {
+            StaffDTO residentDTO = staffService.updateStaff(dto);
+            return ResponseEntity.status(HttpStatus.OK).body(residentDTO);
+        }catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteResident(@RequestParam Integer id) {
+        try {
+            staffService.deleteStaff(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Пользователь удален");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 }

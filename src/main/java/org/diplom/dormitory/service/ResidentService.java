@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -84,6 +85,25 @@ public class ResidentService {
                 .toList();
     }
 
+    public List<ResidentDTO> getAllResidentsPresent(Boolean present) {
+        List<Resident> residents = residentRepository.findAll();
+        List<ResidentDTO> dto = new ArrayList<>();
+
+        for (Resident resident : residents) {
+            Boolean isPresent = resident.getIsPresent();
+            Boolean isDeleted = resident.getIsDeleted();
+
+            if (present.equals(isPresent) && (isDeleted == null || !isDeleted)) {
+                dto.add(ResidentMapper.toDTO(resident));
+            }
+        }
+
+        return dto;
+    }
+
+
+
+
     public ResidentDTO getResidentById(Integer id) {
         return ResidentMapper.toDTO(residentRepository.findById(id).orElseThrow(null));
     }
@@ -106,7 +126,7 @@ public class ResidentService {
         Resident resident = residentRepository.findById(id).orElseThrow(null);
         resident.setIsDeleted(true);
         resident.setDateDeleted(LocalDateTime.now());
-        residentRepository.delete(resident);
+        residentRepository.save(resident);
     }
 
     public ResidentDTO updateResident(ResidentDTO dto) {

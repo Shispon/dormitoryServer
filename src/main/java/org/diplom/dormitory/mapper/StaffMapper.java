@@ -20,7 +20,7 @@ public class StaffMapper {
         StaffDTO staffDTO = new StaffDTO();
         staffDTO.setId(staff.getId());
         staffDTO.setFirstName(staff.getFirstName());
-        staffDTO.setSecondName(staff.getLastName());
+        staffDTO.setSecondName(staff.getSecondName());
         staffDTO.setLastName(staff.getLastName());
         staffDTO.setPhoneNumber(staff.getPhoneNumber());
         staffDTO.setEmail(staff.getMail());

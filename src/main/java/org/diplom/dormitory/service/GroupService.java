@@ -48,4 +48,8 @@ public class GroupService  {
         }
     }
 
+    public Group getGroup(Integer groupId) {
+        return groupRepository.findById(groupId).orElse(null);
+    }
+
 }
