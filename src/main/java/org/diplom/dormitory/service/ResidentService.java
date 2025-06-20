@@ -2,6 +2,7 @@ package org.diplom.dormitory.service;
 
 
 import org.diplom.dormitory.DTO.ResidentDTO;
+import org.diplom.dormitory.DTO.ResidentTelegramDTO;
 import org.diplom.dormitory.mapper.ResidentMapper;
 import org.diplom.dormitory.model.Group;
 import org.diplom.dormitory.model.Resident;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ResidentService {
@@ -101,6 +103,22 @@ public class ResidentService {
         return dto;
     }
 
+    public List<ResidentTelegramDTO> getAllResidentsPresent() {
+        List<Resident> residents = residentRepository.findAll();
+        List<ResidentTelegramDTO> dto = new ArrayList<>();
+
+        for (Resident resident : residents) {
+            Boolean isPresent = resident.getIsPresent();
+            Boolean isDeleted = resident.getIsDeleted();
+
+            if (isPresent.equals(false) && (isDeleted == null || !isDeleted) && resident.getChatId() != null) {
+                dto.add(ResidentMapper.toTelegramDTO(resident));
+            }
+        }
+
+        return dto;
+    }
+
 
 
 
@@ -151,7 +169,19 @@ public class ResidentService {
         return ResidentMapper.toDTO(residentRepository.save(resident));
     }
 
+    public void setChatId(Integer id, String chatId) {
+        Resident resident = residentRepository.findById(id).orElseThrow(null);
+        resident.setChatId(chatId);
+        residentRepository.save(resident);
+    }
 
+    public ResidentTelegramDTO checkPhoneNumber(String phoneNumber) {
+        String cleanPhone = phoneNumber.trim();
+        List<ResidentTelegramDTO> residents = residentRepository.findAllByPhoneNumber(cleanPhone);
+        if (residents.isEmpty()) return null;
 
+        ResidentTelegramDTO res = residents.get(0);
+        return res;
+    }
 
 }

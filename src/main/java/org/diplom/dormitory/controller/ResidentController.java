@@ -2,6 +2,7 @@ package org.diplom.dormitory.controller;
 
 
 import org.diplom.dormitory.DTO.ResidentDTO;
+import org.diplom.dormitory.DTO.ResidentTelegramDTO;
 import org.diplom.dormitory.mapper.ResidentMapper;
 import org.diplom.dormitory.model.Resident;
 import org.diplom.dormitory.service.KafkaService;
@@ -9,7 +10,6 @@ import org.diplom.dormitory.service.ResidentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +21,7 @@ public class ResidentController {
 
     private final ResidentService residentService;
     private final KafkaService kafkaService;
+
     @Autowired
     public ResidentController(ResidentService residentService, KafkaService kafkaService) {
         this.residentService = residentService;
@@ -50,7 +51,7 @@ public class ResidentController {
         try {
             ResidentDTO residentDTO = residentService.getResidentById(id);
             return ResponseEntity.status(HttpStatus.OK).body(residentDTO);
-        }catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
@@ -75,7 +76,7 @@ public class ResidentController {
         try {
             ResidentDTO residentDTO = residentService.updateResident(dto);
             return ResponseEntity.status(HttpStatus.OK).body(residentDTO);
-        }catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
@@ -95,10 +96,41 @@ public class ResidentController {
         try {
             List<ResidentDTO> dto = residentService.getAllResidentsPresent(isPresent);
             return ResponseEntity.status(HttpStatus.OK).body(dto);
-        }catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
+    @PutMapping("/setChatId")
+    public ResponseEntity<Boolean> setChatId(@RequestBody ResidentDTO residentDTO) {
+        try {
+            residentService.setChatId(residentDTO.getId(), residentDTO.getChatId());
+            return ResponseEntity.status(HttpStatus.OK).body(true);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+        }
+    }
 
+    @GetMapping("/checkResidentByPhoneNumber")
+    public ResponseEntity<ResidentTelegramDTO> checkResdientByPhoneNumber(@RequestParam String phoneNumber) {
+            try {
+                ResidentTelegramDTO dto = residentService.checkPhoneNumber(phoneNumber);
+                return ResponseEntity.status(HttpStatus.OK).body(dto);
+            }catch (RuntimeException e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+    }
+
+    @PostMapping("/sendTelegramResident")
+    public ResponseEntity<Boolean> sendTelegramResident() {
+        try {
+            List<ResidentTelegramDTO> dto = residentService.getAllResidentsPresent();
+            for (int i =0 ; i< dto.size(); i++) {
+                kafkaService.sendResidentTelegram(dto.get(i));
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(true);
+        }catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+        }
+    }
 }

@@ -16,6 +16,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        connection:
+          provider_disable_autocommit: true
 
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml

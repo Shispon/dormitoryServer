@@ -1,6 +1,7 @@
 package org.diplom.dormitory.mapper;
 
 import org.diplom.dormitory.DTO.ResidentDTO;
+import org.diplom.dormitory.DTO.ResidentTelegramDTO;
 import org.diplom.dormitory.model.Group;
 import org.diplom.dormitory.model.Resident;
 import org.diplom.dormitory.model.Role;
@@ -8,6 +9,53 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ResidentMapper {
+
+    public static ResidentTelegramDTO toTelegramDTO(Resident resident) {
+        if (resident == null) {return null;}
+        ResidentTelegramDTO dto = new ResidentTelegramDTO() {
+            @Override
+            public Integer getId() {
+                return resident.getId();
+            }
+
+            @Override
+            public String getFirstName() {
+                return resident.getFirstName();
+            }
+
+            @Override
+            public String getSecondName() {
+                return resident.getSecondName();
+            }
+
+            @Override
+            public String getLastName() {
+                return resident.getLastName();
+            }
+
+            @Override
+            public String getPhoneNumber() {
+                return resident.getPhoneNumber();
+            }
+
+            @Override
+            public String getMail() {
+                return resident.getMail();
+            }
+
+            @Override
+            public String getTelegramId() {
+                return resident.getTelegramId();
+            }
+
+            @Override
+            public String getChatId() {
+                return resident.getChatId();
+            }
+
+        };
+        return dto;
+    }
 
     public static ResidentDTO toDTO(Resident resident) {
         if (resident == null) {return null;}

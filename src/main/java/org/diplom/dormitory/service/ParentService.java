@@ -64,4 +64,20 @@ public class ParentService {
         parent.setTelegramId(parentDTO.getTelegramId());
         return ParentMapper.toDTO(parentRepository.save(parent));
     }
+
+    public List<ParentDTO> getParentsByResidentId(Integer residentId) {
+       return parentRepository.findParentsByResidentId(residentId).stream()
+               .map(ParentMapper::toDTO)
+               .toList();
+    }
+
+    public void setChatId(Integer id, String chatId) {
+        Parent parent = parentRepository.findById(id).orElseThrow(null);
+        parent.setChatId(chatId);
+        parentRepository.save(parent);
+    }
+
+    public boolean checkPhoneNumber(String phoneNumber) {
+        return parentRepository.findByPhoneNumber(phoneNumber).isPresent();
+    }
 }

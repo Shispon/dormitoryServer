@@ -67,4 +67,25 @@ public class ParentController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+
+    @PutMapping("/setChatId")
+    public ResponseEntity<Boolean> setChatId(@RequestBody ParentDTO parentDTO) {
+        try {
+            parentService.setChatId(parentDTO.getId(), parentDTO.getChatId());
+            return ResponseEntity.status(HttpStatus.OK).body(true);
+        }catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+        }
+    }
+
+    @GetMapping("/checkParentByPhoneNumber")
+    public ResponseEntity<Boolean> checkResdientByPhoneNumber(@RequestParam String phoneNumber) {
+        try {
+            parentService.checkPhoneNumber(phoneNumber);
+            return ResponseEntity.status(HttpStatus.OK).body(true);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+        }
+
+    }
 }
